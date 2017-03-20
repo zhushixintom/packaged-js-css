@@ -1,0 +1,165 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>scrollForAnchor</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+  <meta content="yes" name="apple-mobile-web-app-capable" />
+  <meta content="telephone=no" name="format-detection" />
+  <meta name="renderer" content="webkit">
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <link rel="stylesheet" href="weui/lib/weui.min.css" />
+  <link rel="stylesheet" href="weui/css/jquery-weui.min.css" />
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/flex.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+  body{background-color: #fff;}
+  .set {
+    height: 250px;
+    color: #000;
+    font-size: 16px;
+  }
+
+  .set1 {
+    background-color: #f0f0f0
+  }
+
+  .set2 {
+    background-color: blue
+  }
+
+  .set3 {
+    background-color: #f0f0f0
+  }
+
+  .set4 {
+    background-color: yellow
+  }
+
+  .set5 {
+    background-color: #f0f0f0
+  }
+
+  .set6 {
+    background-color: cyan
+  }
+  </style>
+</head>
+
+<body>
+  <section class="wrap">
+
+    <div class="top-fixed">
+      <div id="tab-nav" class="tab_nav table fs12 bgf bb">
+        <a href="#s1" class="table-cell active"><span>我是tab1</span></a>
+        <a href="#s2" class="table-cell"><span>我是tab2</span></a>
+        <a href="#s3" class="table-cell"><span>我是tab3</span></a>
+        <a href="#s4" class="table-cell"><span>我是tab4</span></a>
+        <a href="#s5" class="table-cell"><span>我是tab5</span></a>
+        <a href="#s6" class="table-cell"><span>我是tab6</span></a>
+      </div>
+    </div>
+
+    <section class="main">
+      <div class="set set1" id="s1">
+        我是tab1内容区域
+      </div>
+      <div class="set set2" id="s2">
+        我是tab2内容区域
+      </div>
+      <div class="set set3" id="s3">
+        我是tab3内容区域
+      </div>
+      <div class="set set4" id="s4">
+        我是tab4内容区域
+      </div>
+      <div class="set set5" id="s5">
+        我是tab5内容区域
+      </div>
+      <div class="set set6" id="s6">
+        我是tab6内容区域
+      </div>
+    </section>
+  </section>
+  <script src="weui/lib/jquery-2.1.4.js"></script>
+  <script src="weui/lib/fastclick.js"></script>
+  <script>
+  $(function() {
+    FastClick.attach(document.body);
+  });
+  </script>
+  <script src="weui/js/jquery-weui.js"></script>
+  <script src="weui/js/swiper.js"></script>
+
+
+  <script>
+  $(function() {
+    $("#tab-nav a").click(function() {
+      // subNav_scroll($(this));
+      $(this).addClass("active").siblings().removeClass("active");
+      var target = $(this).attr("href");
+      // console.log(target);
+      var targetScroll = $(target).offset().top - 99; // 此数值为顶部fix元素的高度
+      $("html,body").animate({
+        scrollTop: targetScroll
+      }, 300);
+      $("#tab-nav").fadeOut();
+      return false;
+    });
+
+    $(window).scroll(function() {
+      var top = $(document).scrollTop(); //定义变量，获取滚动条的高度，文档被卷去的高度
+      var menu = $("#tab-nav"); //定义变量，获取点击的锚点的父级
+      var items = $(".set"); //定义变量，获取跳转至的锚点区块
+      var curId = ""; //定义变量，当前所在的楼层item #id
+
+      items.each(function() {
+        var _this = $(this); //定义变量，获取当前对象
+        var _thisTop = _this.offset().top; //定义变量，获取当前对象距document顶部偏移量
+        // console.log(_thisTop);
+        if (top >= _thisTop - 100) {
+          curId = "#" + _this.attr("id");
+        } else {
+          return false;
+        }
+      });
+
+      // console.log(curId);
+      //给相应的楼层设置cur,取消其他楼层的cur
+      var curLink = menu.find(".active");
+      if (curId && curLink.attr("href") != curId) {
+        curLink.removeClass("active");
+        menu.find("[href=" + curId + "]").addClass("active");
+      }
+    });
+  });
+  </script>
+  <script>
+  scroll(function(direction) {
+    console.log(direction)
+  });
+  // scroll(function());
+  function scroll(fn) {
+    var beforeScrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop,
+      fn = fn || function() {};
+    console.log(beforeScrollTop);
+    window.addEventListener("scroll", function() {
+      var afterScrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop,
+        delta = afterScrollTop - beforeScrollTop;
+      if (delta === 0) return false;
+      // fn( delta > 0 ? "down" : "up" );
+      if (delta > 0) {
+        $("#tab-nav").fadeOut();
+      } else if (delta < 0) {
+        $("#tab-nav").fadeIn();
+      }
+      beforeScrollTop = afterScrollTop;
+    }, false);
+  };
+  </script>
+</body>
+
+</html>
