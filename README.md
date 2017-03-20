@@ -2,6 +2,7 @@
 directed by shixin(tom),
 only use for js functions and some css animations,
 here will be de dirctions for each files!
+it's designed for phone, so if you use PC browser to open the template, it will be ugly, press 'F12', choose the phone view mode.
 
 ## circleProgressBar
 
