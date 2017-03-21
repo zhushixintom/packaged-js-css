@@ -63,7 +63,7 @@
       </div>
     </div>
 
-    <section class="main">
+    <section class="main" style="padding-top:45px">
       <div class="set set1" id="s1">
         我是tab1内容区域
       </div>
@@ -102,7 +102,7 @@
       $(this).addClass("active").siblings().removeClass("active");
       var target = $(this).attr("href");
       // console.log(target);
-      var targetScroll = $(target).offset().top - 99; // 此数值为顶部fix元素的高度
+      var targetScroll = $(target).offset().top - 45; // 此数值为顶部fix元素的高度
       $("html,body").animate({
         scrollTop: targetScroll
       }, 300);
@@ -112,7 +112,7 @@
 
     $(window).scroll(function() {
       var top = $(document).scrollTop(); //定义变量，获取滚动条的高度，文档被卷去的高度
-      var menu = $("#tab-nav"); //定义变量，获取点击的锚点的父级
+      var menu = $("#tab-nav a"); //定义变量，获取点击的锚点的父级
       var items = $(".set"); //定义变量，获取跳转至的锚点区块
       var curId = ""; //定义变量，当前所在的楼层item #id
 
@@ -120,19 +120,19 @@
         var _this = $(this); //定义变量，获取当前对象
         var _thisTop = _this.offset().top; //定义变量，获取当前对象距document顶部偏移量
         // console.log(_thisTop);
-        if (top >= _thisTop - 100) {
+        if (top >= _thisTop - 45) {
           curId = "#" + _this.attr("id");
         } else {
           return false;
         }
       });
 
-      // console.log(curId);
+           console.log(curId);
       //给相应的楼层设置cur,取消其他楼层的cur
-      var curLink = menu.find(".active");
+      var curLink = menu.filter(".active");
       if (curId && curLink.attr("href") != curId) {
         curLink.removeClass("active");
-        menu.find("[href=" + curId + "]").addClass("active");
+        menu.filter("[href=" + curId + "]").addClass("active");
       }
     });
   });
