@@ -12,6 +12,10 @@ which is a css3 driven animation, as a progress bar, just one cirlce turn. no js
 
 a simple js function for secondary nav, if you click the first nav, the second nav which belongs to the first one, will slide down to show, and other first nav's second nav will slide up to hide.
 
-## scrollForAnchor(todo list)(锚点的平滑过渡，包括判断了上滚和下滚导航隐藏的情况)
+## scrollForAnchor(锚点的平滑过渡，包括判断了上滚和下滚导航隐藏的情况)
 
-a js function for anchor animate, if you click the ancher you will scroll to the href target, for you have a fixed header, solve the problem orginal a tag click to the target bug. Meanwhile the tab will be fading out if you scroll up, and will be fading in if you scroll down. need to improve for if the last element block is lower than a screen, the tab's status will stay in the one which is located at the top of the window.
+a js function for anchor animate, if you click the ancher you will scroll to the href target, for you have a fixed header, solve the problem orginal a tag click to the target bug. Meanwhile the tab will be fading out if you scroll up, and will be fading in if you scroll down. need to improve for if the last element block is lower than a screen, the tab's status will stay in the one which is sticky at the top of the window.
+
+## tabSwitch(tab切换content的内容，考虑了tab不在顶部的情况，在document滚动到tab的位置时，自动贴合window顶部)
+
+a js function for tabs switch, when the tabs are clicked, the corresponding tabcontent will show up, and when document is scrolling, the tabs will stick to the top of the window.
