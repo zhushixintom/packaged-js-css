@@ -96,70 +96,71 @@
 
 
   <script>
-  $(function() {
-    $("#tab-nav a").click(function() {
-      // subNav_scroll($(this));
-      $(this).addClass("active").siblings().removeClass("active");
-      var target = $(this).attr("href");
-      // console.log(target);
-      var targetScroll = $(target).offset().top - 45; // 此数值为顶部fix元素的高度
-      $("html,body").animate({
-        scrollTop: targetScroll
-      }, 300);
-      $("#tab-nav").fadeOut();
-      return false;
-    });
+    function anchorScroll(args){
+      var tabs = args.tabs, // 所有锚点标签的dom集合
+          className = args.className, // 定义为当前的状态class名
+          htmlTop = args.htmlTop, // 顶部fix元素的高度
+          items = args.items; // 所有内容block的dom集合
+          fade = args.fade || false; // 所有内容block的dom集合
 
-    $(window).scroll(function() {
-      var top = $(document).scrollTop(); //定义变量，获取滚动条的高度，文档被卷去的高度
-      var menu = $("#tab-nav a"); //定义变量，获取点击的锚点的父级
-      var items = $(".set"); //定义变量，获取跳转至的锚点区块
-      var curId = ""; //定义变量，当前所在的楼层item #id
+	    tabs.click(function() {
+	      $(this).addClass(className).siblings().removeClass(className);
+	      var target = $(this).attr("href");
+	      var targetScroll = $(target).offset().top - htmlTop; // 此数值为顶部fix元素的高度
+	      $("html,body").animate({
+	        scrollTop: targetScroll
+	      }, 300);
+	      if(fade === true){
+	        // tabs.parent().fadeOut();
+	      }
+	      return false;
+	    });
 
-      items.each(function() {
-        var _this = $(this); //定义变量，获取当前对象
-        var _thisTop = _this.offset().top; //定义变量，获取当前对象距document顶部偏移量
-        // console.log(_thisTop);
-        if (top >= _thisTop - 45) {
-          curId = "#" + _this.attr("id");
-        } else {
-          return false;
-        }
-      });
+	    	var beforeScrollTop = $(document).scrollTop();
+	    $(window).on("scroll", function() {
+	      var scrollTop = $(document).scrollTop(); //定义变量，获取滚动条的高度，文档被卷去的高度
+	      var curId = ""; //定义变量，当前所在的楼层item #id
 
-           console.log(curId);
-      //给相应的楼层设置cur,取消其他楼层的cur
-      var curLink = menu.filter(".active");
-      if (curId && curLink.attr("href") != curId) {
-        curLink.removeClass("active");
-        menu.filter("[href=" + curId + "]").addClass("active");
-      }
-    });
-  });
+	      items.each(function() {
+	        var _this = $(this); //定义变量，获取当前对象
+	        var _thisTop = _this.offset().top; //定义变量，获取当前对象距document顶部偏移量
+	        if (scrollTop >= _thisTop - htmlTop) {
+	          curId = "#" + _this.attr("id");
+	        } else {
+	          return false;
+	        }
+	      });
+	      //给相应的楼层设置cur,取消其他楼层的cur
+	      var curLink = tabs.filter("." + className);
+	      if (curId && curLink.attr("href") != curId) {
+	        curLink.removeClass(className);
+	        tabs.filter("[href=" + curId + "]").addClass(className);
+	      };
+
+	      if(fade === true){
+		      var delta = scrollTop - beforeScrollTop;
+		      if (delta === 0) return false;
+		      if (delta > 0) {
+		        tabs.parent().fadeOut();
+		      } else if (delta < 0) {
+		        tabs.parent().fadeIn();
+		      }
+		      beforeScrollTop = scrollTop;
+	      }
+		    });
+    };
+
+	  $(function() {
+	    var newAnchorScroll = anchorScroll({
+	      tabs: $("#tab-nav a"),
+	      className: "active",
+	      htmlTop: 45,
+	      items: $(".set"),
+	      // fade: true,
+	    })
+	  });
   </script>
-  <script>
-  scroll(function(direction) {
-    console.log(direction)
-  });
-  // scroll(function());
-  function scroll(fn) {
-    var beforeScrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop,
-      fn = fn || function() {};
-    console.log(beforeScrollTop);
-    window.addEventListener("scroll", function() {
-      var afterScrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop,
-        delta = afterScrollTop - beforeScrollTop;
-      if (delta === 0) return false;
-      // fn( delta > 0 ? "down" : "up" );
-      if (delta > 0) {
-        $("#tab-nav").fadeOut();
-      } else if (delta < 0) {
-        $("#tab-nav").fadeIn();
-      }
-      beforeScrollTop = afterScrollTop;
-    }, false);
-  };
-  </script>
+
 </body>
 
 </html>
