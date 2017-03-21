@@ -91,8 +91,6 @@
     FastClick.attach(document.body);
   });
   </script>
-  <script src="weui/js/jquery-weui.js"></script>
-  <script src="weui/js/swiper.js"></script>
 
 
   <script>
@@ -100,26 +98,27 @@
       var tabs = args.tabs, // 所有锚点标签的dom集合
           className = args.className, // 定义为当前的状态class名
           htmlTop = args.htmlTop, // 顶部fix元素的高度
-          items = args.items; // 所有内容block的dom集合
+          items = args.items, // 所有内容block的dom集合
           fade = args.fade || false; // 所有内容block的dom集合
 
 	    tabs.click(function() {
 	      $(this).addClass(className).siblings().removeClass(className);
 	      var target = $(this).attr("href");
 	      var targetScroll = $(target).offset().top - htmlTop; // 此数值为顶部fix元素的高度
-	      $("html,body").animate({
+	      $("body").animate({
 	        scrollTop: targetScroll
 	      }, 300);
-	      if(fade === true){
+	      // if(fade === true){
 	        // tabs.parent().fadeOut();
-	      }
+	      // }
 	      return false;
 	    });
 
-	    	var beforeScrollTop = $(document).scrollTop();
-	    $(window).on("scroll", function() {
-	      var scrollTop = $(document).scrollTop(); //定义变量，获取滚动条的高度，文档被卷去的高度
+	    	var beforeScrollTop = $("body").scrollTop();
+	    $(window).on("scroll", function() { //不能touchmove,可用document
+	      var scrollTop = $("body").scrollTop(); //定义变量，获取滚动条的高度，文档被卷去的高度
 	      var curId = ""; //定义变量，当前所在的楼层item #id
+        console.log("touchmove");
 
 	      items.each(function() {
 	        var _this = $(this); //定义变量，获取当前对象
@@ -144,9 +143,9 @@
 		        tabs.parent().fadeOut();
 		      } else if (delta < 0) {
 		        tabs.parent().fadeIn();
-		      }
+		      };
 		      beforeScrollTop = scrollTop;
-	      }
+	      };
 		    });
     };
 
@@ -156,7 +155,7 @@
 	      className: "active",
 	      htmlTop: 45,
 	      items: $(".set"),
-	      // fade: true,
+	      fade: true,
 	    })
 	  });
   </script>

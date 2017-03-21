@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>tabSwitch</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+  <meta content="yes" name="apple-mobile-web-app-capable" />
+  <meta content="telephone=no" name="format-detection" />
+  <meta name="renderer" content="webkit">
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <link rel="stylesheet" href="weui/lib/weui.min.css" />
+  <link rel="stylesheet" href="weui/css/jquery-weui.min.css" />
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/flex.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+  /*body{background-color: #fff;}*/
+  .set {
+    height: 600px;
+    color: #000;
+    font-size: 16px;
+  }
+
+  .set1 {
+    background-color: #f0f0f0
+  }
+
+  .set2 {
+    background-color: blue
+  }
+
+  .set3 {
+    background-color: #f0f0f0
+  }
+  </style>
+</head>
+
+<body>
+  <section class="wrap">
+
+    <section class="main">
+
+    <div style="height: 200px">
+      我的填充内容
+    </div>
+
+    <div id="tab-nav" class="tab_nav table fs12 bgf bb tc">
+      <a href="javascript:;" class="table-cell active"><span>我是tab1</span></a>
+      <a href="javascript:;" class="table-cell"><span>我是tab2</span></a>
+      <a href="javascript:;" class="table-cell"><span>我是tab3</span></a>
+    </div>
+
+    <div>
+      <div class="set set1" id="s1">
+        我是tab1内容区域
+      </div>
+      <div class="set set2" id="s2">
+        我是tab2内容区域
+      </div>
+      <div class="set set3" id="s3">
+        我是tab3内容区域
+      </div>
+    </div>
+    </section>
+  </section>
+  <script src="weui/lib/jquery-2.1.4.js"></script>
+  <script src="weui/lib/fastclick.js"></script>
+  <script>
+  $(function() {
+    FastClick.attach(document.body);
+  });
+  </script>
+  <script>
+ /* $(document).ready(function(){
+    var nav_top = $(".pro_detail_nav").offset().top;
+    var pad_top = $(".pro_detail_nav").outerHeight();
+    $(document).scroll(function(){
+      if($(document).scrollTop()>nav_top){
+        $(".pro_detail_nav").addClass("fixed_top");
+        $(".pro_detail_nav").next().height(pad_top);
+      }
+      else{
+        $(".pro_detail_nav").removeClass("fixed_top");
+        $(".pro_detail_nav").next().height(0);
+      }
+    })
+  })*/
+    //详情nav切换
+    function tabSwitch(args){
+      var tabs = args.tabs,
+          tabCont = args.tabCont,
+          evt = args.evt || 'click',
+          className = args.className,
+          fixed = args.fixed || false;
+      var navTop = tabs.parent().offset().top;
+      tabs.eq(0).addClass(className);
+      tabCont.eq(0).show().siblings().hide();
+
+      if(fixed){
+        var tabsTop = tabs.parent().offset().top;
+        var tabsHeight = tabs.parent().height();
+        $(document).scroll(function(){
+          var docScrollTop = $(document).scrollTop();
+          var delta = docScrollTop - tabsTop;
+          if(delta > 0){
+            tabs.parent().addClass("top-fixed");
+            if(!tabs.parent().next().hasClass('placeholder')){
+              tabs.parent().after('<div class="placeholder"></div>');
+              $(".placeholder").height(tabsHeight);
+            }
+          }
+          else{
+            tabs.parent().removeClass("top-fixed");
+            tabs.parent().next(".placeholder").remove();
+          }
+        })
+      };
+      tabs[evt](function(){
+        var _this = $(this);
+        var _index = tabs.index(_this);
+        _this.addClass(className).siblings().removeClass(className);
+        tabCont.eq(_index).show().siblings().hide();
+        $("body").animate({scrollTop: navTop}, 300);
+        // $("body").scrollTop(navTop);
+        // $(document).scrollTop(navTop);
+        return false;
+      });
+    };
+
+  $(function() {
+    new tabSwitch({
+      tabs    : $('#tab-nav a'), // 锚点，保证所有标签被包裹在一个标签里；
+      tabCont : $('.set'),       // 锚点指向的内容，保证所有标签被包裹在一个标签里；
+      className: 'active',
+      evt     : 'click',
+      fixed   :  true
+    });
+  });
+  </script>
+
+</body>
+
+</html>
